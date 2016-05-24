@@ -1,0 +1,52 @@
+extends layout
+
+block content
+  //input#search(type="search", placeholder="Enter Post Code")
+  //h2#results
+  h2 #{user._id}
+    
+  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+  script(src="/javascripts/main.js")
+  script(src="https://getaddress.io/js/jquery.getAddress-2.0.1.min.js")
+  form(name="add-address" method='post')
+   #postcode_lookup 
+   #input
+       span.label.label-default First Address Line
+       input#line1(type="text", name="line1" value=line1)
+       span.label.label-default Second Address Line
+       input#line2(type="text", name="line2")
+       span.label.label-default Third Address Line
+       input#line3(type="text", name="line3")
+       span.label.label-default Town
+       input#town(type="text", name="town")
+       span.label.label-default County
+       input#county(type="text", name="county")
+       span.label.label-default Post Code
+       input#postcode(type="text", name="postcode")
+       input(type="hidden" name="userid" value="#{user._id}")
+ 
+   #actions
+       input(type="submit", value="Add")
+  script.
+   $('#postcode_lookup').getAddress({
+    api_key: 'DO0CcuDeekqOsXfTyubZzA4279', 
+    output_fields:{
+        line_1: '#line1',
+        line_2: '#line2',
+        line_3: '#line3',
+        post_town: '#town',
+        county: '#county',
+        postcode: '#postcode'
+    },
+   <!--  Optionally register callbacks at specific stages -->                                                                                                               
+       onLookupSuccess: function(data){/* Your custom code */},
+       onLookupError: function(){/* Your custom code */},
+       onAddressSelected: function(elem,index){/* Your custom code */}
+   });
+//    
+    h1.
+        Premises List
+    ul
+        each premises, i in premiseslist
+            li
+                a(href="mailto:#{premises.postcode}")= premises.postcode
